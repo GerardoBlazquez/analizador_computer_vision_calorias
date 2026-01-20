@@ -9,7 +9,7 @@ Sistema modular basado en **Deep Learning (CNN + Transfer Learning)** para detec
 
 <div align="center">
   
-![Demo](images/imagen analizador5.png)
+![Demo](images/imagen_analizador5.png)
 *Ejemplo: de la UI actual*
 
 </div>
