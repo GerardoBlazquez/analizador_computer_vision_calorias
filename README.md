@@ -30,7 +30,14 @@ Se proporcionan:
 
 Puedes ejecutar y descargar los notebooks desde este repositorio:
 
-- [Demo Analizador de Calorías (Colab-ready)](notebooks/Analziador_de_Calorías_computer vision.ipynb)
+- [Demo Analizador de Calorías (Colab-ready)](notebooks/analizador_calorias_computer_vision.ipynb)
+
+Ejecutar directamente en Google Colab:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/github/TU_USUARIO/TU_REPO/blob/main/notebooks/analizador_calorias_computer_vision.ipynb
+)
+
 ---
 
 ## Objetivo
