@@ -2,18 +2,18 @@
 
 Sistema modular basado en **Deep Learning (CNN + Transfer Learning)** para detectar si una imagen contiene **comida** o **no comida**, y clasificarla posteriormente en múltiples categorías usando un **pipeline en cascada**.
 
-> ⚠️ **Estado:** Pre-alfa / demo  
+>  **Estado:** Pre-alfa / demo  
 > Código funcional orientado a experimentación, evaluación y despliegue controlado.
 
 ---
 ---
-## 📌 Resumen
+##  Resumen
 
 Este proyecto implementa una arquitectura en **cascada de tres capas**:
 
-- 🔹 **Filtro binario**: clasificación `food` vs `no_food`
-- 🍕 **Clasificador de alimentos**: 121 clases (Food-101 ampliado)
-- 🚫 **Clasificador no-food**: 22 categorías (personas, animales, paisajes, objetos...)
+-  **Filtro binario**: clasificación `food` vs `no_food`
+-  **Clasificador de alimentos**: 121 clases (Food-101 ampliado)
+-  **Clasificador no-food**: 22 categorías (personas, animales, paisajes, objetos...)
 
 Incluye además un módulo de **estimación nutricional** (calorías y macronutrientes) basado en un CSV nutricional.
 
@@ -26,7 +26,7 @@ Se proporcionan:
 
 ---
 
-## 🎯 Objetivo
+## Objetivo
 
 Crear un sistema:
 - Reproducible y modular
@@ -36,7 +36,7 @@ Crear un sistema:
 
 ---
 
-## 📌 Tabla de contenidos
+## Tabla de contenidos
 
 - [Descripción](#descripción)
 - [Objetivo](#objetivo)
@@ -58,7 +58,7 @@ Crear un sistema:
 
 ---
 
-## 🧠 Descripción
+## Descripción
 
 Este proyecto implementa un **clasificador en cascada** que:
 
@@ -93,19 +93,19 @@ Imagen
 
 ---
 
-## ✨ Características
+## Características
 
-- ✅ Clasificación en cascada (binario → multiclase)
-- ✅ Entrenamiento configurable por modo
-- ✅ Inferencia local o vía API
-- ✅ Estimación nutricional desde CSV
-- ✅ UI interactiva con Gradio
+- Clasificación en cascada (binario → multiclase)
+- Entrenamiento configurable por modo
+- Inferencia local o vía API
+-  Estimación nutricional desde CSV
+-  UI interactiva con Gradio
 - ✅ Docker listo para despliegue
 - ✅ Compatible con Google Colab
 
 ---
 
-## 📁 Estructura del repositorio
+## Estructura del repositorio
 
 ```text
 .
@@ -127,7 +127,7 @@ Imagen
 
 ---
 
-## ⚙️ Requisitos
+## Requisitos
 
 - Python ≥ 3.9
 - PyTorch
@@ -142,7 +142,7 @@ Principales librerías:
 
 ---
 
-## 📦 Instalación
+## Instalación
 
 ```bash
 pip install -r requirements.txt
@@ -157,7 +157,7 @@ pip install fastapi uvicorn gradio pandas numpy
 
 ---
 
-## 🏋️ Entrenamiento
+## Entrenamiento
 
 El script `train.py` soporta tres modos:
 
@@ -191,7 +191,7 @@ Salida típica: (food, "pizza", 0.94)
 
 ---
 
-## 🏋️ Entrenamiento
+## Entrenamiento
 
 El script `train.py` soporta tres modos:
 
@@ -215,7 +215,7 @@ Los modelos y archivos de clases se guardan automáticamente en --model_dir.
 
 ---
 
-## 🔍 Inferencia
+## Inferencia
 Inferencia en cascada sobre una imagen:
 ```
 from inference_cascade import predict_single
@@ -229,7 +229,7 @@ Salida típica:
 ```
 ---
 
-## 🚀 API (FastAPI)
+## API (FastAPI)
 Lanzar servidor
 ```
 uvicorn app_fastapi:app --host 0.0.0.0 --port 8000
@@ -249,9 +249,9 @@ Información nutricional estimada (si aplica)
 
 ---
 
-## 🎨 Interfaz Gradio
+## Interfaz Gradio
 python app_gradio.py
-# o
+# 
 python main.py
 Opcionalmente, puede consumir la API remota configurando:
 
@@ -259,7 +259,7 @@ export BACKEND_URL="http://localhost:8000"
 
 ---
 
-## 🐳 Docker
+## Docker
 
 Construir imagen
 
@@ -268,7 +268,7 @@ Ejecutar
 docker run -p 8000:8000 food-classifier
 Puedes montar volúmenes para modelos y datos si lo prefieres.
 
-## 📊 Modelos y datos
+## Modelos y datos
 
 - Food: Food-101 + platos adicionales (121 clases)
 - No-food: 22 categorías
@@ -278,7 +278,7 @@ Puedes montar volúmenes para modelos y datos si lo prefieres.
 
 ---
 
-## 🧪 Notas técnicas
+## Notas técnicas
 
 - Copiar datasets desde Google Drive a disco local mejora significativamente el rendimiento
 - En Colab, usar `workers=0` si hay bloqueos del `DataLoader`
@@ -287,7 +287,7 @@ Puedes montar volúmenes para modelos y datos si lo prefieres.
 
 ---
 
-## 🚧 Estado del proyecto
+##  Estado del proyecto
 
 - 🟡 Pre-alfa
 - Código funcional
