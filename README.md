@@ -95,6 +95,7 @@ Imagen
 
 ## Diagrama de Flujo
 
+```mermaid
 flowchart TD
     INICIO(["`**Inicio**`"])
     LOAD_MODELS(["Cargar modelos CNN"])
@@ -157,7 +158,7 @@ style RETURN_NOFOOD fill:#688654,color:#f0f0f0
 
 %% Color del subgrafo
 style Flujo_Clasificacion fill:#292929,stroke:#444444,color:#dcdcdc
-
+```
 
 
 
