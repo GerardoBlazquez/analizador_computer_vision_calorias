@@ -112,57 +112,68 @@ Imagen
 
 ```mermaid
 flowchart TD
-    INICIO["Inicio train.py"]
-    PARSE_ARGS["Parsear argumentos CLI"]
-    CHECK_MODE["Validar modo: binary/food/nofood"]
-    PREPARE_DATA["Preparar datasets<br/>Food-101 + No-Food"]
-    COPY_TMP{"Copy to tmp?<br/>--copy_to_tmp"}
+    INICIO(["`**Inicio**`"])
+    LOAD_MODELS(["Cargar modelos CNN"])
+    LOAD_CLASSES(["Cargar clases y CSV nutricional"])
+    START_API(["Arrancar FastAPI / Gradio"])
+    PREDICT_ENDPOINT(["`**/predict endpoint (POST)**`"])
+
+    INICIO --> LOAD_MODELS
+    LOAD_MODELS --> LOAD_CLASSES
+    LOAD_CLASSES --> START_API
+    START_API --> PREDICT_ENDPOINT
+
+  subgraph Flujo_Clasificacion[" "]
+    %% Nodo título
+    TITULO(["`**Flujo de clasificación en cascada**`"]):::titulo
+
+    %% Conexión fantasma para fijar TITULO arriba
+    TITULO --> VALIDAR_INPUT
+
+    %% Flujo real
+    PREDICT_ENDPOINT --> VALIDAR_INPUT(["Validar imagen de entrada"])
+    VALIDAR_INPUT --> PREPROCESS(["Preprocesado (resize, normalize)"])
+    PREPROCESS --> BIN_CLASSIFIER(["Clasificador binario Food vs No-Food"])
     
-    INICIO --> PARSE_ARGS
-    PARSE_ARGS --> CHECK_MODE
-    CHECK_MODE --> PREPARE_DATA
-    
-    PREPARE_DATA --> COPY_TMP
-    COPY_TMP -->|Sí| COPY_DONE["Copiar dataset a /tmp"]
-    COPY_TMP -->|No| LOAD_TRANSFORMS["Cargar transforms<br/>Albumentations"]
-    COPY_DONE --> LOAD_TRANSFORMS
-    
-    LOAD_TRANSFORMS --> CREATE_DATASETS["Crear datasets:<br/>AlbumentationsImageFolder<br/>BinaryFoodNoFoodDataset"]
-    CREATE_DATASETS --> COMPUTE_WEIGHTS["Calcular pesos<br/>WeightedRandomSampler"]
-    COMPUTE_WEIGHTS --> CREATE_DATALOADERS["DataLoaders:<br/>train/val<br/>workers=2/0 en Colab"]
+    BIN_CLASSIFIER -->|Food| FOOD_CLASSIFIER(["Clasificador Food (121 clases)"])
+    BIN_CLASSIFIER -->|No-Food| NOFOOD_CLASSIFIER(["Clasificador No-Food (22 clases)"])
 
-    subgraph TRAINING_LOOP["🔄 Bucle de Entrenamiento"]
-        EPOCH_START["Época N"]
-        TRAIN_EPOCH["train_epoch()<br/>AMP + AdamW<br/>CE Loss"]
-        EVAL_VAL["eval_model()<br/>Accuracy en val"]
-        SAVE_CHECKPOINT{"Mejor acc?<br/>Guardar checkpoint"}
-    end
+    FOOD_CLASSIFIER --> FOOD_RESULT(["Predicción Food + probabilidad"])
+    FOOD_RESULT --> NUTRITION(["Estimación nutricional (CSV)"])
+    NUTRITION --> RETURN_FOOD(["`**Retornar resultado Food**`"])
 
-    CREATE_DATALOADERS --> EPOCH_START
-    EPOCH_START --> TRAIN_EPOCH
-    TRAIN_EPOCH --> EVAL_VAL
-    EVAL_VAL --> SAVE_CHECKPOINT
-    SAVE_CHECKPOINT --> EPOCH_FIN["Fin época"]
-    EPOCH_FIN -.->|Siguiente| EPOCH_START
+    NOFOOD_CLASSIFIER --> NOFOOD_RESULT(["Predicción No-Food + probabilidad"])
+    NOFOOD_RESULT --> RETURN_NOFOOD(["`**Retornar resultado No-Food**`"])
+  end
 
-    EPOCH_FIN --> END_TRAINING["Fin entrenamiento<br/>Best acc reportado"]
+classDef titulo fill:#585858,color:#f0f0f0,stroke:none;
+classDef error fill:#d98c8c,color:#6b2c2c,stroke:#a25757;
 
-    PARSE_ARGS -.->|Error| ERROR_ARGS["Error: faltan argumentos<br/>--mode requerido"]
-    CHECK_MODE -.->|Error| ERROR_MODE["Error: modo no soportado"]
-    CREATE_DATASETS -.->|Error| ERROR_DATA["Error: dataset vacío"]
-    TRAINING_LOOP -.->|Excepción| SAVE_CRASH["crash_partial_{mode}.pth"]
+PREDICT_ENDPOINT -->|Imagen inválida| ERROR_INPUT["Error: imagen no válida"]:::error
+BIN_CLASSIFIER -->|Confianza baja| ERROR_CONF["Error: confianza insuficiente"]:::error
 
-    classDef inicio fill:#a3c1f7,stroke:#333,stroke-width:2px
-    classDef proceso fill:#f7efb3,stroke:#333,stroke-width:2px
-    classDef decision fill:#ffd5a3,stroke:#333,stroke-width:2px
-    classDef error fill:#d9787a,stroke:#a25757,stroke-width:2px
-    classDef final fill:#688654,stroke:#333,stroke-width:3px
+%% Estilos de nodos principales
+style INICIO fill:#a3c1f7,color:#1f1f1f
+style LOAD_MODELS fill:#f7d3a3,color:#1f1f1f
+style LOAD_CLASSES fill:#f7efb3,color:#1f1f1f
+style START_API fill:#b8dbb8,color:#1f1f1f
+style PREDICT_ENDPOINT fill:#a2ddd4,stroke:#555555,color:#1f1f1f
 
-    class INICIO,EPOCH_START,END_TRAINING inicio
-    class PREPARE_DATA,LOAD_TRANSFORMS,CREATE_DATASETS,COMPUTE_WEIGHTS,CREATE_DATALOADERS proceso
-    class COPY_TMP,SAVE_CHECKPOINT decision
-    class TRAIN_EPOCH,EVAL_VAL final
-    class ERROR_ARGS,ERROR_MODE,ERROR_DATA,SAVE_CRASH error
+%% Estilos del flujo interno
+style VALIDAR_INPUT fill:#d9787a,color:#3f1c1e
+style PREPROCESS fill:#f7efb3,color:#1f1f1f
+style BIN_CLASSIFIER fill:#a3c1f7,color:#1f1f1f
+style FOOD_CLASSIFIER fill:#c9e4a1,color:#1f1f1f
+style NOFOOD_CLASSIFIER fill:#c7a2f7,color:#1f1f1f
+style FOOD_RESULT fill:#b8dbb8,color:#1f1f1f
+style NUTRITION fill:#f7d3a3,color:#1f1f1f
+style RETURN_FOOD fill:#688654,color:#f0f0f0
+style NOFOOD_RESULT fill:#b8dbb8,color:#1f1f1f
+style RETURN_NOFOOD fill:#688654,color:#f0f0f0
+
+%% Color del subgrafo
+style Flujo_Clasificacion fill:#292929,stroke:#444444,color:#dcdcdc
+
 ```
 
 
