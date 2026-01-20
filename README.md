@@ -96,19 +96,68 @@ Imagen
 ## Diagrama de Flujo
 
 flowchart TD
-    A[Imagen de entrada] --> B[Preprocesado<br/>(resize, normalize)]
-    B --> C[Clasificador Binario<br/>Food vs No-Food]
+    INICIO(["`**Inicio**`"])
+    LOAD_MODELS(["Cargar modelos CNN"])
+    LOAD_CLASSES(["Cargar clases y CSV nutricional"])
+    START_API(["Arrancar FastAPI / Gradio"])
+    PREDICT_ENDPOINT(["`**/predict endpoint (POST)**`"])
 
-    C -->|Food| D[Clasificador Food<br/>(121 clases)]
-    C -->|No-Food| E[Clasificador No-Food<br/>(22 clases)]
+    INICIO --> LOAD_MODELS
+    LOAD_MODELS --> LOAD_CLASSES
+    LOAD_CLASSES --> START_API
+    START_API --> PREDICT_ENDPOINT
 
-    D --> F[Predicción Food + Probabilidad]
-    E --> G[Predicción No-Food + Probabilidad]
+  subgraph Flujo_Clasificacion[" "]
+    %% Nodo título
+    TITULO(["`**Flujo de clasificación en cascada**`"]):::titulo
 
-    F --> H[Estimación Nutricional<br/>(calorías y macros)]
-    H --> I[Salida final Food]
+    %% Conexión fantasma para fijar TITULO arriba
+    TITULO --> VALIDAR_INPUT
 
-    G --> J[Salida final No-Food]
+    %% Flujo real
+    PREDICT_ENDPOINT --> VALIDAR_INPUT(["Validar imagen de entrada"])
+    VALIDAR_INPUT --> PREPROCESS(["Preprocesado (resize, normalize)"])
+    PREPROCESS --> BIN_CLASSIFIER(["Clasificador binario Food vs No-Food"])
+    
+    BIN_CLASSIFIER -->|Food| FOOD_CLASSIFIER(["Clasificador Food (121 clases)"])
+    BIN_CLASSIFIER -->|No-Food| NOFOOD_CLASSIFIER(["Clasificador No-Food (22 clases)"])
+
+    FOOD_CLASSIFIER --> FOOD_RESULT(["Predicción Food + probabilidad"])
+    FOOD_RESULT --> NUTRITION(["Estimación nutricional (CSV)"])
+    NUTRITION --> RETURN_FOOD(["`**Retornar resultado Food**`"])
+
+    NOFOOD_CLASSIFIER --> NOFOOD_RESULT(["Predicción No-Food + probabilidad"])
+    NOFOOD_RESULT --> RETURN_NOFOOD(["`**Retornar resultado No-Food**`"])
+  end
+
+classDef titulo fill:#585858,color:#f0f0f0,stroke:none;
+classDef error fill:#d98c8c,color:#6b2c2c,stroke:#a25757;
+
+PREDICT_ENDPOINT -->|Imagen inválida| ERROR_INPUT["Error: imagen no válida"]:::error
+BIN_CLASSIFIER -->|Confianza baja| ERROR_CONF["Error: confianza insuficiente"]:::error
+
+%% Estilos de nodos principales
+style INICIO fill:#a3c1f7,color:#1f1f1f
+style LOAD_MODELS fill:#f7d3a3,color:#1f1f1f
+style LOAD_CLASSES fill:#f7efb3,color:#1f1f1f
+style START_API fill:#b8dbb8,color:#1f1f1f
+style PREDICT_ENDPOINT fill:#a2ddd4,stroke:#555555,color:#1f1f1f
+
+%% Estilos del flujo interno
+style VALIDAR_INPUT fill:#d9787a,color:#3f1c1e
+style PREPROCESS fill:#f7efb3,color:#1f1f1f
+style BIN_CLASSIFIER fill:#a3c1f7,color:#1f1f1f
+style FOOD_CLASSIFIER fill:#c9e4a1,color:#1f1f1f
+style NOFOOD_CLASSIFIER fill:#c7a2f7,color:#1f1f1f
+style FOOD_RESULT fill:#b8dbb8,color:#1f1f1f
+style NUTRITION fill:#f7d3a3,color:#1f1f1f
+style RETURN_FOOD fill:#688654,color:#f0f0f0
+style NOFOOD_RESULT fill:#b8dbb8,color:#1f1f1f
+style RETURN_NOFOOD fill:#688654,color:#f0f0f0
+
+%% Color del subgrafo
+style Flujo_Clasificacion fill:#292929,stroke:#444444,color:#dcdcdc
+
 
 
 
