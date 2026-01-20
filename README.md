@@ -263,6 +263,66 @@ python train.py \
   --img_size 192
 
 ```
+
+### Diagrama de Flujo del Entrenamiento
+
+```mermaid
+flowchart TD
+    INICIO(["`**Inicio train.py`**"])
+    PARSE_ARGS(["Parsear argumentos CLI"])
+    CHECK_MODE(["Validar modo: binary/food/nofood"])
+    PREPARE_DATA(["Preparar datasets<br/>Food-101 + No-Food"])
+    COPY_TMP(["¿Copy to tmp?<br/>(--copy_to_tmp)"])
+    
+    INICIO --> PARSE_ARGS
+    PARSE_ARGS --> CHECK_MODE
+    CHECK_MODE --> PREPARE_DATA
+    
+    PREPARE_DATA --> COPY_TMP
+    COPY_TMP -->|Sí| COPY_DONE(["Copiar dataset a /tmp"])
+    COPY_TMP -->|No| LOAD_TRANSFORMS["Cargar transforms<br/>Albumentations"]
+    COPY_DONE --> LOAD_TRANSFORMS
+    
+    LOAD_TRANSFORMS --> CREATE_DATASETS(["Crear datasets:<br/>AlbumentationsImageFolder<br/>BinaryFoodNoFoodDataset"])
+    CREATE_DATASETS --> COMPUTE_WEIGHTS(["Calcular pesos<br/>WeightedRandomSampler"])
+    COMPUTE_WEIGHTS --> CREATE_DATALOADERS(["DataLoaders:<br/>train/val<br/>workers=2/0 en Colab"])
+
+    subgraph TRAINING_LOOP["🔄 Bucle de Entrenamiento (args.epochs)"]
+        EPOCH_START(["**Época N**"])
+        TRAIN_EPOCH(["train_epoch()<br/>AMP + AdamW<br/>CE Loss (label_smoothing=0.1)"])
+        EVAL_VAL(["eval_model()<br/>Accuracy en val"])
+        SAVE_CHECKPOINT(["¿Mejor acc?<br/>Guardar best_{mode}.pth<br/>Cada N epochs"])
+    end
+
+    CREATE_DATALOADERS --> EPOCH_START
+    EPOCH_START --> TRAIN_EPOCH
+    TRAIN_EPOCH --> EVAL_VAL
+    EVAL_VAL --> SAVE_CHECKPOINT
+    SAVE_CHECKPOINT --> EPOCH_FIN["Fin época"]
+    EPOCH_FIN -.->|Siguiente| EPOCH_START
+
+    EPOCH_FIN --> END_TRAINING["**Fin entrenamiento**<br/>Best acc reportado"]
+
+    %% Manejo de errores
+    PARSE_ARGS -.->|Error args| ERROR_ARGS["Error: faltan argumentos<br/>--mode requerido"]
+    CHECK_MODE -.->|Modo inválido| ERROR_MODE["Error: modo no soportado"]
+    CREATE_DATASETS -.->|Dataset vacío| ERROR_DATA["Error: dataset vacío"]
+    TRAINING_LOOP -.->|Excepción| SAVE_CRASH["Guardar crash_partial_{mode}.pth"]
+
+    classDef inicio fill:#a3c1f7,stroke:#333,stroke-width:2px,color:#1f1f1f
+    classDef proceso fill:#f7efb3,stroke:#333,stroke-width:2px,color:#1f1f1f
+    classDef decision fill:#ffd5a3,stroke:#333,stroke-width:2px,color:#1f1f1f
+    classDef error fill:#d9787a,stroke:#a25757,stroke-width:2px,color:#3f1c1e
+    classDef final fill:#688654,stroke:#333,stroke-width:3px,color:#f0f0f0
+    classDef loop fill:#c9e4a1,stroke:#4a7c3d,stroke-width:2px,color:#1f1f1f
+
+    class INICIO,EPOCH_START,END_TRAINING inicio
+    class PREPARE_DATA,LOAD_TRANSFORMS,CREATE_DATASETS,COMPUTE_WEIGHTS,CREATE_DATALOADERS proceso
+    class COPY_TMP,SAVE_CHECKPOINT decision
+    class TRAIN_EPOCH,EVAL_VAL loop
+    class ERROR_ARGS,ERROR_MODE,ERROR_DATA,SAVE_CRASH error
+```
+
 ---
 
 ##  Inferencia
@@ -359,7 +419,7 @@ Puedes montar volúmenes para modelos y datos si lo prefieres.
 - No-food: 22 categorías
 - Nutrición: CSV con calorías y macronutrientes estimados
 
-⚠️ Asegúrate de que `classes_*.txt` coincidan exactamente con los checkpoints usados.
+> Asegúrate de que `classes_*.txt` coincidan exactamente con los checkpoints usados.
 
 ---
 
@@ -381,7 +441,7 @@ Puedes montar volúmenes para modelos y datos si lo prefieres.
 
 ---
 
-## 🤝 Contribuir
+## Contribuir
 
 ¡Las contribuciones son bienvenidas! Si quieres mejorar este proyecto:
 
