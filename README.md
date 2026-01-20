@@ -72,7 +72,7 @@ Este proyecto implementa un **clasificador en cascada** que:
 ---
 
 ## Arquitectura
-
+```text
 Imagen
 │
 ▼
@@ -81,7 +81,7 @@ Imagen
 ├── food ─────▶ [ Food Classifier (121 clases) ] ─▶ Nutrición
 │
 └── no_food ──▶ [ No-Food Classifier (22 clases) ]
-
+```
 
 ### Detalles técnicos
 - Backbone: **EfficientNet (timm)**
