@@ -327,7 +327,7 @@ flowchart TD
 result = predict_single("image.jpg", bin_thresh=0.5)
 print(result)
 ```
-Salida típica: (food, "pizza", 0.94)
+> Salida típica: (food, "pizza", 0.94)
 
 ---
 
