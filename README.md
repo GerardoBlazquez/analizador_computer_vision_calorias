@@ -268,9 +268,6 @@ python train.py \
 
 ### Diagrama de Flujo del Entrenamiento
 
-text
-## 🏋️ Diagrama de Flujo del Entrenamiento (Sin Errores)
-
 ```mermaid
 flowchart TD
     INICIO["Inicio train.py"]
