@@ -3,9 +3,16 @@
 Sistema modular basado en **Deep Learning (CNN + Transfer Learning)** para detectar si una imagen contiene **comida** o **no comida**, y clasificarla posteriormente en múltiples categorías usando un **pipeline en cascada**.
 
 > **Versión Beta disponible:**  
-> La versión funcional en producción de este sistema se encuentra desplegada en mi portfolio personal: https://gcodev.es/  
+> La versión funcional en producción de este sistema se encuentra desplegada en mi portfolio personal: [https://gcodev.es/](https://gcodev.es/)  
 >  
 > Esta versión incluye una interfaz interactiva, backend operativo y mejoras respecto a este repositorio, que actúa como **base técnica y experimental** del proyecto.
+
+<div align="center">
+  
+![Demo](images/imagen analizador5.png)
+*Ejemplo: de la UI actual*
+
+</div>
 
 ---
 ---
