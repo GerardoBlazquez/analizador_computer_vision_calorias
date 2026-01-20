@@ -14,7 +14,7 @@ Sistema modular basado en **Deep Learning (CNN + Transfer Learning)** para detec
 
 </div>
 
----
+
 ---
 ##  Resumen
 
