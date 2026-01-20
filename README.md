@@ -383,16 +383,27 @@ Puedes montar volúmenes para modelos y datos si lo prefieres.
 
 ## 🤝 Contribuir
 
-- Abrir un issue
-- Crear una rama (`feature/...` o `fix/...`)
-- Enviar un Pull Request con una descripción clara
+¡Las contribuciones son bienvenidas! Si quieres mejorar este proyecto:
+
+1. Abre un **issue** para proponer cambios, reportar bugs o sugerir mejoras.
+2. Crea una nueva rama a partir de `main`:
+   - `feature/nombre-funcionalidad`
+   - `fix/descripcion-bug`
+3. Realiza tus cambios asegurándote de que:
+   - El código sea claro y esté documentado
+   - No rompa funcionalidades existentes
+4. Envía un **Pull Request** describiendo claramente:
+   - Qué se ha cambiado
+   - Por qué es necesario
+   - Cómo probarlo
+
+> Sugerencia: si el cambio es grande, abre primero un issue para discutirlo.
 
 ---
 
 ## 📄 Licencia
 
-Pendiente de definir (recomendado: MIT).
-
+Este proyecto se publicará bajo licencia **MIT**, lo que permite su uso, modificación y distribución libremente, siempre que se mantenga la atribución al autor.
 
 
 
