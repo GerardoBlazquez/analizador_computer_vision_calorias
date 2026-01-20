@@ -307,10 +307,10 @@ flowchart TD
     EPOCH_FIN -.->|Next| EPOCH_START
     EPOCH_FIN --> END_TRAINING["Best acc guardado"]
 
-    classDef inicio fill:#a3c1f7
-    classDef proceso fill:#f7efb3
-    classDef decision fill:#ffd5a3
-    classDef loop fill:#c9e4a1
+    classDef inicio fill:#4a90e2,stroke:#2e5b9f,stroke-width:2px
+    classDef proceso fill:#f5a623,stroke:#d18a1a,stroke-width:2px  
+    classDef decision fill:#e94e77,stroke:#c12e57,stroke-width:2px
+    classDef loop fill:#50c878,stroke:#3a9a5a,stroke-width:2px
 
     class INICIO,END_TRAINING inicio
     class PREPARE_DATA,LOAD_TRANSFORMS,CREATE_DATASETS,COMPUTE_WEIGHTS,CREATE_DATALOADERS proceso
