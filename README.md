@@ -71,7 +71,7 @@ Este proyecto implementa un **clasificador en cascada** que:
 
 ---
 
-## 🏗 Arquitectura
+## Arquitectura
 
 Imagen
 │
@@ -90,6 +90,27 @@ Imagen
 - Mixed Precision Training (AMP)
 - AdamW + class weighting
 - Inferencia con umbral configurable
+
+---
+
+## Diagrama de Flujo
+
+flowchart TD
+    A[Imagen de entrada] --> B[Preprocesado<br/>(resize, normalize)]
+    B --> C[Clasificador Binario<br/>Food vs No-Food]
+
+    C -->|Food| D[Clasificador Food<br/>(121 clases)]
+    C -->|No-Food| E[Clasificador No-Food<br/>(22 clases)]
+
+    D --> F[Predicción Food + Probabilidad]
+    E --> G[Predicción No-Food + Probabilidad]
+
+    F --> H[Estimación Nutricional<br/>(calorías y macros)]
+    H --> I[Salida final Food]
+
+    G --> J[Salida final No-Food]
+
+
 
 ---
 
