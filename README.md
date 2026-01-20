@@ -26,6 +26,11 @@ Se proporcionan:
 - UI Gradio  
 - Docker para despliegue
 
+### Notebooks
+
+Puedes ejecutar y descargar los notebooks desde este repositorio:
+
+- [Demo Analizador de Calorías (Colab-ready)](notebooks/Analziador_de_Calorías_computer vision.ipynb)
 ---
 
 ## Objetivo
